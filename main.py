@@ -45,7 +45,7 @@ if date_prev != date:
         total_money = round(participations * current, 2)
         sheet.update_cell(L+1,4, total_money)
         for row in [2,3,4,5]:
-            percentage = float(sheet.cell(row,2).value)
+            percentage = float(column2[row - 1])
             sheet.update_cell(row,3,total_money * percentage)
     else:
         L = len(column1)
