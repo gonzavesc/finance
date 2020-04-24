@@ -29,6 +29,7 @@ def get_money():
             values.append(re.sub("\s","",re.sub("\n","",rows.get_text())))
 
     #print("The value at {} is {} eur".format(re.sub("A","",headings[-1]),re.sub(",",".",re.sub("EUR","",values[-2]))))
-    date = re.sub("A","",headings[-1])
+    search_date = re.search('[0-9]{2}/[0-9]{2}/[0-9]{4}',headings[-1])
+    date = search_date.group(0)
     current = float(re.sub(",",".",re.sub("EUR","",values[-2])))
     return date,current

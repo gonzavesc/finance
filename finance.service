@@ -1,0 +1,11 @@
+[Unit]
+Description=Starts the service to update the google sheets.
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/gonzalo/finance/main.sh
+ExecStop=/bin/kill -9 $MAINPID
+
+[Install]
+WantedBy=multi-user.target
