@@ -2,7 +2,10 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
 import get_money
-
+import get_bitcoin
+import datetime
+comission = 0.975
+bit_value = get_bitcoin.get_btc()
 (date, current) = get_money.get_money()
 f = open('date','r')
 date_prev = f.readline()
@@ -50,3 +53,27 @@ if date_prev != date:
             sheet.update_cell(row,3,total_money * percentage)
     else:
         L = len(column1)
+scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+ok = 0
+while ok == 0:
+    try:
+        creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
+        ok = 1
+    except:
+        pass
+ok = 0
+while ok == 0:
+    try:
+        client = gspread.authorize(creds)
+        ok = 1
+    except:
+        pass
+gsh = client.open('Finances')
+sheet3 = gsh.get_worksheet(2)
+bit_value = float(bit_value) * comission
+sheet3.update_cell(2,6,bit_value)
+y = datetime.datetime.now().year
+m = datetime.datetime.now().month
+d = datetime.datetime.now().day
+date = "{:02}/{:02}/{:04}".format(d,m,y)
+sheet3.update_cell(2,8,date)
