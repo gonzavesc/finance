@@ -53,6 +53,29 @@ if date_prev != date:
             sheet.update_cell(row,3,total_money * percentage)
     else:
         L = len(column1)
+    #setting highest number
+    max_val = float(sheet3.cell(2,11).value)
+    min_val = float(sheet3.cell(2,13).value)
+    if float(current) > max_val:
+        sheet3.update_cell(2,11,current)
+        sheet3.update_cell(2,12,date)
+    if float(bit_value) < min_val:
+        sheet3.update_cell(2,13,bit_value)
+        sheet3.update_cell(2,14,date)
+    
+    #Updateting for finances sheet 
+    gsh = client.open('Finances')
+    sheet2 = gsh.get_worksheet(1)
+    sheet2.update_cell(2,6,current)
+    sheet2.update_cell(2,8,date)
+    max_val = float(sheet2.cell(2,11).value)
+    min_val = float(sheet2.cell(2,13).value)
+    if float(current) > max_val:
+        sheet2.update_cell(2,11,current)
+        sheet2.update_cell(2,12,date)
+    if float(bit_value) < min_val:
+        sheet2.update_cell(2,13,bit_value)
+        sheet2.update_cell(2,14,date)
 scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
 ok = 0
 while ok == 0:
@@ -77,3 +100,11 @@ m = datetime.datetime.now().month
 d = datetime.datetime.now().day
 date = "{:02}/{:02}/{:04}".format(d,m,y)
 sheet3.update_cell(2,8,date)
+max_val = float(sheet3.cell(2,11).value)
+min_val = float(sheet3.cell(2,13).value)
+if float(bit_value) > max_val:
+    sheet3.update_cell(2,11,bit_value)
+    sheet3.update_cell(2,12,date)
+if float(bit_value) < min_val:
+    sheet3.update_cell(2,13,bit_value)
+    sheet3.update_cell(2,14,date)
