@@ -4,31 +4,32 @@ from pprint import pprint
 import get_money
 import get_bitcoin
 import datetime
+import update_to_google
 comission = 0.975
 bit_value = get_bitcoin.get_btc()
 (date, current) = get_money.get_money()
 f = open('date','r')
 date_prev = f.readline()
 f.close()
+scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+ok = 0
+while ok == 0:
+    try:
+        creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
+        ok = 1
+    except:
+        pass
+ok = 0
+while ok == 0:
+    try:
+        client = gspread.authorize(creds)
+        ok = 1
+    except:
+        pass
 if date_prev != date:
     f = open('date','w')
     f.write(date)
     f.close()
-    scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
-    ok = 0
-    while ok == 0:
-        try:
-            creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
-            ok = 1
-        except:
-            pass
-    ok = 0
-    while ok == 0:
-        try:
-            client = gspread.authorize(creds)
-            ok = 1
-        except:
-            pass
     gsh = client.open('Investing')
     sheet3 = gsh.get_worksheet(2)
     sheet = gsh.get_worksheet(0)
@@ -59,8 +60,8 @@ if date_prev != date:
     if float(current) > max_val:
         sheet3.update_cell(2,11,current)
         sheet3.update_cell(2,12,date)
-    if float(bit_value) < min_val:
-        sheet3.update_cell(2,13,bit_value)
+    if float(current) < min_val:
+        sheet3.update_cell(2,13,current)
         sheet3.update_cell(2,14,date)
     
     #Updateting for finances sheet 
@@ -73,24 +74,9 @@ if date_prev != date:
     if float(current) > max_val:
         sheet2.update_cell(2,11,current)
         sheet2.update_cell(2,12,date)
-    if float(bit_value) < min_val:
-        sheet2.update_cell(2,13,bit_value)
+    if float(current) < min_val:
+        sheet2.update_cell(2,13,current)
         sheet2.update_cell(2,14,date)
-scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
-ok = 0
-while ok == 0:
-    try:
-        creds = ServiceAccountCredentials.from_json_keyfile_name('creds.json', scope)
-        ok = 1
-    except:
-        pass
-ok = 0
-while ok == 0:
-    try:
-        client = gspread.authorize(creds)
-        ok = 1
-    except:
-        pass
 gsh = client.open('Finances')
 sheet3 = gsh.get_worksheet(2)
 bit_value = float(bit_value) * comission
@@ -108,3 +94,7 @@ if float(bit_value) > max_val:
 if float(bit_value) < min_val:
     sheet3.update_cell(2,13,bit_value)
     sheet3.update_cell(2,14,date)
+#Now we update the other isin
+sheet=gsh.get_worksheet(3)
+update_to_google.update_to_google("ES0110407097",3,client)
+
