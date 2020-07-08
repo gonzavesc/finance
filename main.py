@@ -5,9 +5,10 @@ import get_money
 import get_bitcoin
 import datetime
 import update_to_google
+import get_morningstar
 comission = 0.975
 bit_value = get_bitcoin.get_btc()
-(date, current) = get_money.get_money()
+(date, current) = get_morningstar.get_morningstar("IE0032126645")
 f = open('date','r')
 date_prev = f.readline()
 f.close()
@@ -31,7 +32,7 @@ if date_prev != date:
     f.write(date)
     f.close()
     gsh = client.open('Investing')
-    sheet3 = gsh.get_worksheet(2)
+    sheet3 = gsh.get_worksheet(1)
     sheet = gsh.get_worksheet(0)
 
 
@@ -95,6 +96,5 @@ if float(bit_value) < min_val:
     sheet3.update_cell(2,13,bit_value)
     sheet3.update_cell(2,14,date)
 #Now we update the other isin
-sheet=gsh.get_worksheet(3)
 update_to_google.update_to_google("ES0110407097",3,client)
 
