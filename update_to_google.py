@@ -7,7 +7,7 @@ def update_to_google(isin,sheet,client):
         date_prev = f.readline()
         f.close()
     except:
-        date = "00/00/0000"
+        date_prev = "00/00/0000"
     (date, current) = get_morningstar.get_morningstar(isin)
     f = open(date_file,'w')
     f.write(date)
