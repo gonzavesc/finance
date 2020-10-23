@@ -9,9 +9,12 @@ import get_morningstar
 comission = 0.975
 bit_value = get_bitcoin.get_btc()
 (date, current) = get_morningstar.get_morningstar("IE0032126645")
-f = open('date','r')
-date_prev = f.readline()
-f.close()
+try:
+    f = open('date','r')
+    date_prev = f.readline()
+    f.close()
+except:
+    date_prev = '00/00/0000'
 scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
 ok = 0
 while ok == 0:
@@ -43,11 +46,10 @@ if date_prev != date:
     column2 = sheet.col_values(2)
     if date not in column1:
         L = len(column2)
-        print(L)
         participations = float(sheet.cell(6,5).value)
         sheet.update_cell(L+1,1,date)
         sheet.update_cell(L+1,2,"Update")
-        total_money = round(participations * current, 2)
+        total_money = participations * float(current)
         sheet.update_cell(L+1,4, total_money)
         sheet.update_cell(L+1,9, current)
         for row in [2,3,4,5]:
