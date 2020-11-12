@@ -8,7 +8,7 @@ import update_to_google
 import get_morningstar
 comission = 0.975
 bit_value = get_bitcoin.get_btc()
-(date, current) = get_morningstar.get_morningstar("IE0032126645")
+(date, current) = get_morningstar.get_morningstar("IE0032620787")
 try:
     f = open('date','r')
     date_prev = f.readline()
